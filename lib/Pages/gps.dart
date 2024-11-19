@@ -54,7 +54,7 @@ class _GpsScreenState extends State<GpsScreen> {
       }
 
       // Obtiene la ubicación actual con precisión media
-      Position position = await Geolocator.getCurrentPosition(
+      Position position = await Geolocator.getCurrentPosition( //aqui se obtiene las coordenadas
           desiredAccuracy: LocationAccuracy.medium,
           timeLimit: Duration(seconds: 10)); // Límite de tiempo de 10 segundos
 

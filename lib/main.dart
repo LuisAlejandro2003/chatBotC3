@@ -5,7 +5,6 @@ import 'pages/gps.dart';
 import 'pages/qr.dart';
 import 'pages/micro.dart';
 import 'pages/sensores.dart';  // Importar la pantalla de sensores
-
 void main() {
   runApp(MyApp());
 }

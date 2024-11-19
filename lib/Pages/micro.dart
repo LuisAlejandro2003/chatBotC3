@@ -9,28 +9,28 @@ class MicroScreen extends StatefulWidget {
 }
 
 class _MicroScreenState extends State<MicroScreen> {
-  late stt.SpeechToText _speech;
+  late stt.SpeechToText _speech; 
   late FlutterTts _flutterTts; // Flutter Text-to-Speech
   bool _isListening = false;
-  String _speechText = '';
+  String _speechText = ''; //se capturan y guardan en esta variable
   String _selectedLanguage = "en-US";
 
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
-    _initializeTts(); // Inicializar TTS
+    _initializeTts(); // Inicializar TTS se inicia la funcion 
   }
 
   // Inicializar la función de Speech-to-Text
   Future<void> _initializeSpeech() async {
-    _speech = stt.SpeechToText();
+    _speech = stt.SpeechToText(); //aqui se inicia el hablar para que se escriba
     await _requestMicrophonePermission();
   }
 
   // Inicializar la función de Text-to-Speech
   Future<void> _initializeTts() async {
-    _flutterTts = FlutterTts();
+    _flutterTts = FlutterTts(); //aqui texto a voz se inicia
     await _flutterTts.setLanguage(_selectedLanguage);
   }
 
@@ -43,7 +43,7 @@ class _MicroScreenState extends State<MicroScreen> {
   }
 
   // Iniciar la grabación de voz
-  Future<void> _startListening() async {
+  Future<void> _startListening() async { //lo de la voz inicia en este arreglo
     var status = await Permission.microphone.request();
     if (status.isGranted) {
       bool available = await _speech.initialize(
@@ -57,7 +57,7 @@ class _MicroScreenState extends State<MicroScreen> {
 
       if (available) {
         setState(() => _isListening = true);
-        _speech.listen(
+        _speech.listen( // aqui se inicia la conversion de voz a texto
           onResult: (val) {
             setState(() {
               _speechText = val.recognizedWords;
@@ -86,9 +86,9 @@ class _MicroScreenState extends State<MicroScreen> {
   }
 
   // Reproducir el texto como audio usando Text-to-Speech
-  Future<void> _speak() async {
+  Future<void> _speak() async { // _speak se encarga de convertir el texto a _speechText
     if (_speechText.isNotEmpty) {
-      await _flutterTts.speak(_speechText);
+      await _flutterTts.speak(_speechText); //aqui se convierte de texto a voz
     } else {
       await _flutterTts.speak('No hay texto para reproducir.');
     }

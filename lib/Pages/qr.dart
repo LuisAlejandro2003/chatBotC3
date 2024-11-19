@@ -10,9 +10,9 @@ class QrScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Escáner de QR'),
       ),
-      body: MobileScanner(
-        onDetect: (BarcodeCapture capture) {
-          final List<Barcode> barcodes = capture.barcodes;
+      body: MobileScanner( //MobileScanner es el encargado de manejar la cámara y detectar códigos QR
+        onDetect: (BarcodeCapture capture) { //onDetect es el callback que se ejecuta cuando el escáner detecta uno o más códigos QR
+          final List<Barcode> barcodes = capture.barcodes; //capture.barcodes es una lista de códigos QR detectados
           for (final barcode in barcodes) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Código escaneado: ${barcode.rawValue}')),

@@ -31,5 +31,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/logo.jpg
+    - assets/images/bot.png
+    - assets/images/user.png
 
   uses-material-design: true

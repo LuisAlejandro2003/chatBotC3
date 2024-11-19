@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Future<void> _checkInternetConnection() async { //aqui se verifica lo del internet
+  Future<void> _checkInternetConnection() async {
     try {
       final response = await http.get(Uri.parse('https://google.com'));
       if (response.statusCode == 200) {
@@ -115,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (_controller.text.isNotEmpty) {
       setState(() {
-        _messages.add(ChatMessage(text: _controller.text, isUser: true)); //se guardan los mensajes
+        _messages.add(ChatMessage(text: _controller.text, isUser: true));
       });
       String userMessage = _controller.text;
       _controller.clear();
@@ -155,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future<void> _saveMessages() async { //aqui se guardan los datos
+  Future<void> _saveMessages() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> messagesToSave = _messages
         .take(40)
@@ -164,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
     await prefs.setStringList('chatMessages', messagesToSave);
   }
 
-  Future<void> _loadMessages() async { //aqui se restauran los datos
+  Future<void> _loadMessages() async {
     final prefs = await SharedPreferences.getInstance();
     List<String>? savedMessages = prefs.getStringList('chatMessages');
 
@@ -199,30 +199,53 @@ class _ChatScreenState extends State<ChatScreen> {
                     alignment: _messages[index].isUser
                         ? Alignment.centerRight
                         : Alignment.centerLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: _messages[index].isUser
-                            ? Colors.indigoAccent
-                            : Colors.grey[300],
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                          bottomLeft: _messages[index].isUser
-                              ? Radius.circular(16)
-                              : Radius.circular(0),
-                          bottomRight: _messages[index].isUser
-                              ? Radius.circular(0)
-                              : Radius.circular(16),
+                    child: Row(
+                      mainAxisAlignment: _messages[index].isUser
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.start,
+                      children: [
+                        if (!_messages[index].isUser)
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage('assets/images/bot.png'),
+                          ),
+                        SizedBox(width: 8),
+                        Flexible(
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: _messages[index].isUser
+                                  ? Colors.indigoAccent
+                                  : Colors.grey[300],
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16),
+                                bottomLeft: _messages[index].isUser
+                                    ? Radius.circular(16)
+                                    : Radius.circular(0),
+                                bottomRight: _messages[index].isUser
+                                    ? Radius.circular(0)
+                                    : Radius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              _messages[index].text,
+                              style: TextStyle(
+                                color: _messages[index].isUser
+                                    ? Colors.white
+                                    : Colors.black87,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        _messages[index].text,
-                        style: TextStyle(
-                          color: _messages[index].isUser ? Colors.white : Colors.black87,
-                          fontSize: 16,
-                        ),
-                      ),
+                        SizedBox(width: 8),
+                        if (_messages[index].isUser)
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage('assets/images/user.png'),
+                          ),
+                      ],
                     ),
                   ),
                 );
