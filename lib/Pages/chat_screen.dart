@@ -149,12 +149,6 @@ class _ChatScreenState extends State<ChatScreen> {
     await _flutterTts.speak(text);
   }
 
-  void _changeLanguage(String languageCode) {
-    setState(() {
-      _selectedLanguage = languageCode;
-    });
-  }
-
   Future<void> _saveMessages() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> messagesToSave = _messages
@@ -183,69 +177,42 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pink[50],
       appBar: AppBar(
-        title: Text('Chatbot AI', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.indigoAccent,
+        title: Text(
+          'Chatbot AI',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        backgroundColor: Colors.pink,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  child: Align(
-                    alignment: _messages[index].isUser
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: _messages[index].isUser
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      children: [
-                        if (!_messages[index].isUser)
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage('assets/images/bot.png'),
-                          ),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Container(
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: _messages[index].isUser
-                                  ? Colors.indigoAccent
-                                  : Colors.grey[300],
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                topRight: Radius.circular(16),
-                                bottomLeft: _messages[index].isUser
-                                    ? Radius.circular(16)
-                                    : Radius.circular(0),
-                                bottomRight: _messages[index].isUser
-                                    ? Radius.circular(0)
-                                    : Radius.circular(16),
-                              ),
-                            ),
-                            child: Text(
-                              _messages[index].text,
-                              style: TextStyle(
-                                color: _messages[index].isUser
-                                    ? Colors.white
-                                    : Colors.black87,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
+                return Align(
+                  alignment: _messages[index].isUser
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Card(
+                    color: _messages[index].isUser ? Colors.pink[100] : Colors.white,
+                    elevation: 5,
+                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        _messages[index].text,
+                        style: TextStyle(
+                          color: _messages[index].isUser ? Colors.pink[800] : Colors.grey[800],
+                          fontSize: 16,
                         ),
-                        SizedBox(width: 8),
-                        if (_messages[index].isUser)
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage('assets/images/user.png'),
-                          ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -253,11 +220,14 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Row(
-              children: <Widget>[
+              children: [
                 IconButton(
-                  icon: Icon(_isListening ? Icons.mic_off : Icons.mic, color: Colors.indigoAccent),
+                  icon: Icon(
+                    _isListening ? Icons.mic_off : Icons.mic,
+                    color: Colors.pink,
+                  ),
                   onPressed: _isListening ? _stopListening : _startListening,
                 ),
                 Expanded(
@@ -266,8 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: InputDecoration(
                       hintText: 'Escribe un mensaje...',
                       filled: true,
-                      fillColor: Colors.grey[200],
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -276,32 +245,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.indigoAccent),
+                  icon: Icon(Icons.send, color: Colors.pink),
                   onPressed: _sendMessage,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _changeLanguage("en-US"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigoAccent,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text("Inglés (EE.UU.)"),
-                ),
-                ElevatedButton(
-                  onPressed: () => _changeLanguage("es-MX"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigoAccent,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text("Español (México)"),
                 ),
               ],
             ),
